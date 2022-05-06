@@ -1,0 +1,28 @@
+version: '3.3'
+services:
+  doska_postgres:
+    container_name: doska_postgres
+    image: postgres:latest
+    environment:
+      POSTGRES_DB_PORT: $POSTGRES_PORT
+      POSTGRES_DB_HOST: $POSTGRES_HOST
+      POSTGRES_DB: $POSTGRES_DB
+      POSTGRES_USER: $POSTGRES_USER
+      POSTGRES_PASSWORD: $POSTGRES_PASSWORD
+    volumes:
+      - ${PWD}/dumps:/docker-entrypoint-initdb.d
+      - ./docker/postgresql/data:/var/lib/postgresql/data
+      - ./docker/postgresql/postgres.conf:/etc/postgresql/postgresql.conf
+      - ./docker/pg_hba.conf:/etc/postgresql/pg_hba.conf
+    ports:
+      - "5432:5432"
+    networks:
+      - doska-network
+
+volumes:
+  doska_postgres:
+    driver: local
+
+networks:
+  doska-network:
+    driver: bridge
